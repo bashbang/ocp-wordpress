@@ -17,6 +17,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Get Chart Version
+        id: chart-version
+        run: |
+          CHART_VERSION=$(awk '/^version:/ {print $2}' helm/Chart.yaml)
+          echo "version=$CHART_VERSION" >> $GITHUB_OUTPUT
+
       - name: Setup Helm
         uses: azure/setup-helm@v3
         with:
@@ -26,6 +32,14 @@ jobs:
         run: |
           helm package helm/
           helm repo index . --url https://bashbang.github.com/ocp-wordpress/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.chart-version.outputs.version }}
+          files: |
+            *.tgz
+          generate_release_notes: true
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
