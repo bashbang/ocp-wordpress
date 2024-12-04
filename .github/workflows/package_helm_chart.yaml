@@ -1,0 +1,30 @@
+name: Release Helm Chart
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-publish:
+    name: Package Helm Chart
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Helm
+        uses: helm/setup-helm@v4
+
+      - name: Package Helm Chart
+        run: |
+          helm package helm/
+          helm repo index . --url https://github.com/bashbang/ocp-wordpress/
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
+          publish_branch: gh-pages
