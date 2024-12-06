@@ -31,7 +31,7 @@ jobs:
       - name: Package Helm Chart
         run: |
           helm package helm/
-          helm repo index . --url https://bashbang.github.com/ocp-wordpress/
+          helm repo index . --url https://bashbang.github.io/ocp-wordpress/
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
