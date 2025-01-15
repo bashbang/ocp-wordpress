@@ -59,6 +59,11 @@ spec:
                 define('WP_CACHE', true); // Added by W3 Total Cache
                 $$_SERVER['HTTPS'] = 'on';
                 $$_SERVER['SERVER_PORT'] = 443;
+            - name: COMPOSER_AUTH
+              valueFrom:
+                secretKeyRef:
+                  name: composer-auth
+                  key: auth.json
           envFrom:
             - secretRef:
                 name: {{ .Values.appName }}
