@@ -3,12 +3,12 @@ entries:
   ocp-wordpress:
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2025-01-17T14:56:33.391753033Z"
+    created: "2025-01-17T15:09:31.018911006Z"
     description: Deploy a WordPress instance
-    digest: 7181e4e2af066df4cdbf75e980aca14251bed330a89631f53774d10c96c8fad3
+    digest: 66ef4223a3671b887ad3e52e4d87feeeb7337a3fb6f71592b1a09c68730c1ca2
     name: ocp-wordpress
     type: application
     urls:
     - https://bashbang.github.io/ocp-wordpress/ocp-wordpress-0.1.0.tgz
     version: 0.1.0
-generated: "2025-01-17T14:56:33.391226601Z"
+generated: "2025-01-17T15:09:31.018369879Z"
