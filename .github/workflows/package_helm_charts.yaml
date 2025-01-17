@@ -58,11 +58,14 @@ jobs:
           mkdir -p ../output
           helm package . -d ../output
 
-      - name: Update Helm Repo Index
-        if: ${{ steps.changes.outputs.wp_helm_changed == 'true' || steps.changes.outputs.galera_helm_changed == 'true' }}
-        working-directory: ./output
-        run: |
-          helm repo index . --url https://bashbang.github.io/ocp-wordpress/ --merge ../index.yaml
-
       - name: Deploy to GitHub Pages
-        if: ${{ steps.changes.outputs.wp_helm_changed == 'true' || steps
+        if: ${{ steps.changes.outputs.wp_helm_changed == 'true' || steps.changes.outputs.galera_helm_changed == 'true' }}
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./output
+          publish_branch: gh-pages
+
+      - name: No Changes Detected
+        if: ${{ steps.changes.outputs.wp_helm_changed == 'false' && steps.changes.outputs.galera_helm_changed == 'false' }}
+        run: echo "No changes detected in wp-helm or galera-helm. Skipping build and deploy steps."
