@@ -38,6 +38,7 @@ jobs:
           helm repo index . --url https://bashbang.github.io/ocp-wordpress/ --merge index.yaml
 
       - name: Create GitHub Release
+        working-directory: ./wp-helm
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ steps.chart-version.outputs.version }}
@@ -46,6 +47,7 @@ jobs:
           generate_release_notes: true
 
       - name: Deploy to GitHub Pages
+        working-directory: ./wp-helm
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
