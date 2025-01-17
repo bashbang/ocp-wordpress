@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "postinstall"
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      serviceAccountName: pipeline
+      containers:
+        - name: postinstall
+          image: "ghcr.io/bashbang/util:release"
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              # Patch the my.cnf file
+              oc patch statefulset {{ .Release.Name }}-mariadb-galera -p '{"spec":{"template":{"spec":{"containers":[{"name":"mariadb-galera","env":[{"name":"MARIADB_GALERA_CLUSTER_ADDRESS","value":"{{ tpl .Values.clusterAddress .}}"}]}]}}}}'
