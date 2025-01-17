@@ -35,11 +35,11 @@ jobs:
       - name: Package Helm Chart
         working-directory: ./wp-helm
         run: |
-          helm package .
-          mv *.tgz ../
+          mkdir -p ../output
+          helm package . -d ../output
 
       - name: Create Helm Repo Index
-        working-directory: ./
+        working-directory: ./output
         run: |
           helm repo index . --url https://bashbang.github.io/ocp-wordpress/
 
@@ -48,12 +48,12 @@ jobs:
         with:
           tag_name: v${{ steps.chart-version.outputs.version }}
           files: |
-            *.tgz
+            output/*.tgz
           generate_release_notes: true
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./
+          publish_dir: ./output
           publish_branch: gh-pages
