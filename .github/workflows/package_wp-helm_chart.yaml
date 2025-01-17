@@ -32,6 +32,7 @@ jobs:
           version: 'latest'
 
       - name: Package Helm Chart
+        working-directory: ./wp-helm
         run: |
           helm package wp-helm/
           helm repo index . --url https://bashbang.github.io/ocp-wordpress/ --merge index.yaml
@@ -44,14 +45,9 @@ jobs:
             *.tgz
           generate_release_notes: true
 
-      - name: Debug Output
-        run: |
-          echo "Listing root directory"
-          ls -R
-
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./ocp-wordpress
+          publish_dir: ./
           publish_branch: gh-pages
