@@ -45,14 +45,17 @@ jobs:
           generate_release_notes: true
 
       - name: Debug Output
-      run: |
-        ls -R
-        ls -R ./ocp-wordpress
-        ls -R ./wp-helm
+        run: |
+          echo "Listing root directory"
+          ls -R
+          echo "Listing wp-helm directory"
+          ls -R ./wp-helm
+          echo "Listing ocp-wordpress directory"
+          ls -R ./ocp-wordpress
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./
+          publish_dir: ./ocp-wordpress
           publish_branch: gh-pages
