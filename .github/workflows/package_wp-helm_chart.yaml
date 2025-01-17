@@ -48,10 +48,6 @@ jobs:
         run: |
           echo "Listing root directory"
           ls -R
-          echo "Listing wp-helm directory"
-          ls -R ./wp-helm
-          echo "Listing ocp-wordpress directory"
-          ls -R ./ocp-wordpress
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
