@@ -36,7 +36,12 @@ jobs:
         working-directory: ./wp-helm
         run: |
           helm package .
-          helm repo index . --url https://bashbang.github.io/ocp-wordpress/ --merge index.yaml
+          mv *.tgz ../
+
+      - name: Create Helm Repo Index
+        working-directory: ./
+        run: |
+          helm repo index . --url https://bashbang.github.io/ocp-wordpress/
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
