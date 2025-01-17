@@ -23,7 +23,7 @@ jobs:
       - name: Get Chart Version
         id: chart-version
         run: |
-          CHART_VERSION=$(awk '/^version:/ {print $2}' wp-helm/Chart.yaml)
+          CHART_VERSION=$(awk '/^version:/ {print $2}' Chart.yaml)
           echo "version=$CHART_VERSION" >> $GITHUB_OUTPUT
 
       - name: Setup Helm
@@ -34,7 +34,7 @@ jobs:
       - name: Package Helm Chart
         working-directory: ./wp-helm
         run: |
-          helm package wp-helm/
+          helm package .
           helm repo index . --url https://bashbang.github.io/ocp-wordpress/ --merge index.yaml
 
       - name: Create GitHub Release
