@@ -33,6 +33,7 @@ jobs:
 
       - name: Package Helm Chart
         run: |
+          helm dependency update galera-helm/
           helm package galera-helm/
           helm repo index . --url https://bashbang.github.io/ocp-galera/ --merge index.yaml
 
