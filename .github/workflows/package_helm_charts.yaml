@@ -8,6 +8,7 @@ on:
       - wp-helm/**
       - galera-helm/**
       - .github/workflows/package_helm_charts.yaml
+  workflow_dispatch:
 
 permissions:
   contents: write
