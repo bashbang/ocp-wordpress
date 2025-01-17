@@ -44,9 +44,15 @@ jobs:
             *.tgz
           generate_release_notes: true
 
+      - name: Debug Output
+      run: |
+        ls -R
+        ls -R ./ocp-wordpress
+        ls -R ./wp-helm
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./ocp-wordpress
+          publish_dir: ./
           publish_branch: gh-pages
