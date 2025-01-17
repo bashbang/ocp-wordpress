@@ -1,4 +1,4 @@
-name: Release WP Helm Chart
+name: Release Helm Charts
 
 on:
   push:
@@ -6,50 +6,61 @@ on:
       - main
     paths:
       - wp-helm/**
-      - .github/workflows/package_wp-helm_chart.yaml
+      - galera-helm/**
+      - .github/workflows/package_helm_charts.yaml
 
 permissions:
   contents: write
 
 jobs:
   build-and-publish:
-    name: Package Helm Chart
+    name: Package Helm Charts
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Get Chart Version
-        working-directory: ./wp-helm
-        id: chart-version
+      - name: Determine Changes
+        id: changes
         run: |
-          CHART_VERSION=$(awk '/^version:/ {print $2}' Chart.yaml)
-          echo "version=$CHART_VERSION" >> $GITHUB_OUTPUT
+          # Check for changes in wp-helm
+          if git diff --name-only HEAD^ HEAD | grep -q "^wp-helm/"; then
+            echo "wp_helm_changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "wp_helm_changed=false" >> $GITHUB_OUTPUT
+          fi
+
+          # Check for changes in galera-helm
+          if git diff --name-only HEAD^ HEAD | grep -q "^galera-helm/"; then
+            echo "galera_helm_changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "galera_helm_changed=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Setup Helm
         uses: azure/setup-helm@v3
         with:
           version: 'latest'
 
-      - name: Package Helm Chart
+      - name: Package WP Helm Chart
+        if: ${{ steps.changes.outputs.wp_helm_changed == 'true' }}
         working-directory: ./wp-helm
         run: |
           mkdir -p ../output
           helm package . -d ../output
 
-      - name: Create Helm Repo Index
+      - name: Package Galera Helm Chart
+        if: ${{ steps.changes.outputs.galera_helm_changed == 'true' }}
+        working-directory: ./galera-helm
+        run: |
+          mkdir -p ../output
+          helm package . -d ../output
+
+      - name: Update Helm Repo Index
         working-directory: ./output
         run: |
-          helm repo index . --url https://bashbang.github.io/ocp-wordpress/
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: v${{ steps.chart-version.outputs.version }}
-          files: |
-            output/*.tgz
-          generate_release_notes: true
+          helm repo index . --url https://bashbang.github.io/ocp-wordpress/ --merge ../index.yaml
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
