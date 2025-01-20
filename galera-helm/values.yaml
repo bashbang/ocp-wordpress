@@ -5,7 +5,6 @@ appName: galera
 cluster: gold
 clusterAddress: "gcomm://{{ .Release.Name }}-mariadb-galera-0.{{ .Release.Name }}-mariadb-galera-headless.{{ .Values.licensePlate }}-{{ .Values.nameSpaceSuffix }}.svc.cluster.local,{{ .Release.Name }}-mariadb-galera-1.{{ .Release.Name }}-mariadb-galera-headless.{{ .Values.licensePlate }}-{{ .Values.nameSpaceSuffix }}.svc.cluster.local,{{ .Release.Name }}-mariadb-galera-2.{{ .Release.Name }}-mariadb-galera-headless.{{ .Values.licensePlate }}-{{ .Values.nameSpaceSuffix }}.svc.cluster.local"
 
-
 mariadb-galera:
   image:
     debug: true

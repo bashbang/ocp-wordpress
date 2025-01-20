@@ -63,6 +63,10 @@ jobs:
           helm dep update
           helm package . -d ../output
 
+      - name: Generate Index.yaml
+        run: |
+          helm repo index ./output --url https://bashbang.github.io/ocp-wordpress/output
+
       - name: Deploy to GitHub Pages
         if: env.wp_helm_changed == 'true' || env.galera_helm_changed == 'true'
         uses: peaceiris/actions-gh-pages@v3
