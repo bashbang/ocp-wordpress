@@ -64,7 +64,7 @@ jobs:
           helm package . -d ../output
 
       - name: Deploy to GitHub Pages
-        if: ${{ steps.changes.outputs.wp_helm_changed == 'true' || steps.changes.outputs.galera_helm_changed == 'true' }}
+        if: env.wp_helm_changed == 'true' || env.galera_helm_changed == 'true'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -73,5 +73,5 @@ jobs:
           keep_files: true
 
       - name: No Changes Detected
-        if: env.wp_helm_changed == 'false' && env.galera_helm_changed == 'false'
-        run: echo "No changes detected in wp-helm or galera-helm. Skipping build and deploy steps."
+      if: env.wp_helm_changed == 'false' && env.galera_helm_changed == 'false'
+      run: echo "No changes detected in wp-helm or galera-helm. Skipping build and deploy steps."
