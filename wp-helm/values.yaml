@@ -4,6 +4,7 @@ imageNamespace: abc123-tools
 serviceAccountName: abc123-vault
 domain: dev.mydomain.com
 
+
 wordpress:
   # WP Config
   user: wordpress
