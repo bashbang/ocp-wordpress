@@ -1,0 +1,47 @@
+name: Release Helm Charts
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - wp-helm/**
+      - .github/workflows/package_wp-helm_chart.yaml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-publish:
+    name: Package Helm Charts
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: 'latest'
+
+      - name: Package WP Helm Chart
+        working-directory: ./wp-helm
+        run: |
+          mkdir -p ../output/wp-helm
+          helm package . -d ../output/wp-helm
+
+      - name: Generate Index.yaml
+        run: |
+          helm repo index ./output/wp-helm --url https://bashbang.github.io/ocp-wordpress/output/wp-helm
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./output
+          publish_branch: gh-pages
+          keep_files: true
