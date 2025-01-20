@@ -73,5 +73,5 @@ jobs:
           keep_files: true
 
       - name: No Changes Detected
-      if: env.wp_helm_changed == 'false' && env.galera_helm_changed == 'false'
-      run: echo "No changes detected in wp-helm or galera-helm. Skipping build and deploy steps."
+        if: env.wp_helm_changed == 'false' && env.galera_helm_changed == 'false'
+        run: echo "No changes detected in wp-helm or galera-helm. Skipping build and deploy steps."
