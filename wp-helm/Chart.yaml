@@ -1,6 +1,6 @@
 ---
 apiVersion: v2
-name: ocp-wordpress
+name: wp-helm
 description: Deploy a WordPress instance
 type: application
 

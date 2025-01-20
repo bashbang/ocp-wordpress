@@ -30,16 +30,19 @@ jobs:
           echo "Checking for changes in wp-helm and galera-helm folders..."
           CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
           echo "Changed files: $CHANGED_FILES"
+
           if echo "$CHANGED_FILES" | grep -q "^wp-helm/"; then
             echo "wp_helm_changed=true" >> $GITHUB_ENV
           else
             echo "wp_helm_changed=false" >> $GITHUB_ENV
           fi
+
           if echo "$CHANGED_FILES" | grep -q "^galera-helm/"; then
             echo "galera_helm_changed=true" >> $GITHUB_ENV
           else
             echo "galera_helm_changed=false" >> $GITHUB_ENV
           fi
+
       - name: Setup Helm
         uses: azure/setup-helm@v3
         with:
@@ -51,6 +54,7 @@ jobs:
         run: |
           mkdir -p ../output
           helm package . -d ../output
+
       - name: Package Galera Helm Chart
         if: env.galera_helm_changed == 'true'
         working-directory: ./galera-helm
@@ -58,9 +62,11 @@ jobs:
           mkdir -p ../output
           helm dep update
           helm package . -d ../output
+
       - name: Generate Index.yaml
         run: |
           helm repo index ./output --url https://bashbang.github.io/ocp-wordpress/output
+
       - name: Deploy to GitHub Pages
         if: env.wp_helm_changed == 'true' || env.galera_helm_changed == 'true'
         uses: peaceiris/actions-gh-pages@v3
