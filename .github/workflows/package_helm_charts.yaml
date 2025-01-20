@@ -60,6 +60,7 @@ jobs:
         working-directory: ./galera-helm
         run: |
           mkdir -p ../output
+          helm dep update
           helm package . -d ../output
 
       - name: Deploy to GitHub Pages
