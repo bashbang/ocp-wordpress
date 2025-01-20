@@ -44,7 +44,7 @@ jobs:
 
       - name: Generate Index.yaml
         run: |
-          helm repo index ./output --url https://bashbang.github.io/ocp-wordpress/output
+          helm repo index ./output --url https://bashbang.github.io/ocp-wordpress
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
