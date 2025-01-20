@@ -49,14 +49,14 @@ jobs:
           version: 'latest'
 
       - name: Package WP Helm Chart
-        if: env.wp_helm_changed == 'true'
+        # if: env.wp_helm_changed == 'true'
         working-directory: ./wp-helm
         run: |
           mkdir -p ../output
           helm package . -d ../output
 
       - name: Package Galera Helm Chart
-        if: env.galera_helm_changed == 'true'
+        # if: env.galera_helm_changed == 'true'
         working-directory: ./galera-helm
         run: |
           mkdir -p ../output
@@ -66,9 +66,11 @@ jobs:
       - name: Generate Index.yaml
         run: |
           helm repo index ./output --url https://bashbang.github.io/ocp-wordpress/output
+          echo "Adding wp-helm and galera-helm to index.yaml"
+          ls -l ./output # List packaged charts to confirm they are there
 
       - name: Deploy to GitHub Pages
-        if: env.wp_helm_changed == 'true' || env.galera_helm_changed == 'true'
+        # if: env.wp_helm_changed == 'true' || env.galera_helm_changed == 'true'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

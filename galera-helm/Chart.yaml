@@ -9,3 +9,4 @@ dependencies:
   - name: mariadb-galera
     version: 14.0.10
     repository: https://charts.bitnami.com/bitnami
+    condition: mariadb.enabled
