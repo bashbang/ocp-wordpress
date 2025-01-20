@@ -2,7 +2,7 @@ apiVersion: v2
 name: galera-helm
 description: A customized version of mariadb-galera for OCP
 type: application
-version: 0.1.0
+version: 0.1.1
 appVersion: "1.17.0"
 
 dependencies:
