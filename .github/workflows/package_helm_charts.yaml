@@ -65,6 +65,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./output
           publish_branch: gh-pages
+          keep_files: true
 
       - name: No Changes Detected
         if: ${{ steps.changes.outputs.wp_helm_changed == 'false' && steps.changes.outputs.galera_helm_changed == 'false' }}
