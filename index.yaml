@@ -1,0 +1,29 @@
+apiVersion: v1
+entries:
+  mariadb-galera:
+  - apiVersion: v2
+    appVersion: 1.17.0
+    created: "2025-01-20T19:22:19.994578285Z"
+    dependencies:
+    - name: mariadb-galera
+      repository: https://charts.bitnami.com/bitnami
+      version: 14.0.10
+    description: A Helm chart for Kubernetes
+    digest: 026b07d309a1c196b32a172cf531ca383794af03eab6cfe2e252b8f2b5d53e8e
+    name: mariadb-galera
+    type: application
+    urls:
+    - https://bashbang.github.io/ocp-wordpress/output/mariadb-galera-0.1.0.tgz
+    version: 0.1.0
+  ocp-wordpress:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2025-01-20T19:22:19.994992151Z"
+    description: Deploy a WordPress instance
+    digest: ae7ca8ee1e3e7e5c4f92cd8e386259768d03f2a61b4655949de24a773a6a535c
+    name: ocp-wordpress
+    type: application
+    urls:
+    - https://bashbang.github.io/ocp-wordpress/output/ocp-wordpress-0.1.0.tgz
+    version: 0.1.0
+generated: "2025-01-20T19:22:19.991184364Z"
