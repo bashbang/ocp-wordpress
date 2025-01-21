@@ -2,7 +2,8 @@ namespace: abc123-dev
 appName: my-wordpress
 imageNamespace: abc123-tools
 serviceAccountName: abc123-vault
-domain: dev.mydomain.com
+# if you have a doman like dev.mydomain.com add that here, otherwise leave it empty and a temp domain/route will be produced for you.
+domain:
 
 wordpress:
   # WP Config
@@ -21,7 +22,6 @@ wordpress:
       },
       "fieldPath": "spec.template.spec.containers[0].image"
     }]'
-
 
   # infrastructure
   replicaCount: 1

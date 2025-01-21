@@ -9,18 +9,22 @@ metadata:
     haproxy.router.openshift.io/balance: "roundrobin"
     # Disable the cookies for load testing as the load test is coming from a single source host.
     haproxy.router.openshift.io/disable_cookies: "true"
-    haproxy.router.openshift.io/ip_whitelist: {{ .Values.wordpress.whitelistedIPs }}
+    haproxy.router.openshift.io/ip_whitelist: "{{ .Values.wordpress.whitelistedIPs }}"
 spec:
+{{- if .Values.domain }}
   host: {{ .Values.domain }}
+{{- end }}
   port:
     targetPort: {{ .Values.wordpress.service.targetPort }}
   tls:
+{{- if .Values.domain }}
     key: |-
 {{ .Files.Get "certs/private.key" | indent 6 }}
     certificate: |-
 {{ .Files.Get "certs/certificate.crt" | indent 6 }}
     caCertificate: |-
 {{ .Files.Get "certs/cacertificate.crt" | indent 6 }}
+{{- end }}
     insecureEdgeTerminationPolicy: Redirect
     termination: edge
   to:

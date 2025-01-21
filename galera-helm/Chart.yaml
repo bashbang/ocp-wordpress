@@ -1,0 +1,12 @@
+apiVersion: v2
+name: ocp-galera-helm
+description: A customized version of mariadb-galera for OCP
+type: application
+version: 0.1.2
+appVersion: "1.17.0"
+
+dependencies:
+  - name: mariadb-galera
+    version: 14.0.10
+    repository: https://charts.bitnami.com/bitnami
+    condition: mariadb.enabled

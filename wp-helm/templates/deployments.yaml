@@ -63,7 +63,8 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: composer-auth
-                  key: auth.json          envFrom:
+                  key: auth.json
+          envFrom:
             - secretRef:
                 name: {{ .Values.appName }}
           readinessProbe:
