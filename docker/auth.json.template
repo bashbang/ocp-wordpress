@@ -1,0 +1,21 @@
+{
+    "bitbucket-oauth": {
+        "bitbucket.org": {
+            "consumer-key": "REDACTED",
+            "consumer-secret": "REDACTED",
+        }
+    },
+    "github-oauth": {
+        "github.com": "REDACTED"
+    },
+    "http-basic": {
+        "composer.freemius.com":{
+            "username": "REDACTED",
+            "password": "REDACTED"
+        },
+        "connect.advancedcustomfields.com": {
+            "username": "REDACTED",
+            "password": "REDACTED"
+        }
+    }
+}

@@ -1,0 +1,49 @@
+{
+    "name": "root/html",
+    "description": "MySite",
+    "type": "project",
+    "repositories":[
+        {
+            "type":"composer",
+            "url":"https://wpackagist.org",
+            "only": [
+                "wpackagist-plugin/*",
+                "wpackagist-theme/*"
+            ]
+        },
+        {
+            "type": "composer",
+            "url": "https://packagist.gov.bc.ca/"
+        }
+    ],
+    "require": {
+        "bcgov-plugin/rapunzel": "dev-development",
+        "humanmade/s3-uploads": "3.0.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "Root\\Html\\": "src/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        }
+    },
+    "extra": {
+        "installer-paths": {
+            "wp-content/mu-plugins/{$name}/": [
+                "type:wordpress-muplugin"
+            ],
+            "wp-content/plugins/{$name}/": [
+                "type:wordpress-plugin"
+            ],
+            "wp-content/themes/{$name}/": [
+                "type:wordpress-theme"
+            ],
+            "installer-types": [
+                "wordpress-assets"
+            ]
+        }
+    }
+}
