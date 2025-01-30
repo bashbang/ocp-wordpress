@@ -1,5 +1,5 @@
-# This action produces a docker artifact of my utility pod used in k8s.
-name: Build WP Image
+# This action produces a docker artifact of a Wordpress Image de3signed for OCP.
+name: Build and Release WP Image
 
 on:
   push:
@@ -25,6 +25,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      # Create auth.json from secrets
+      - name: Create auth.json
+        run: |
+          echo '${{ secrets.COMPOSER_AUTH }}' > ./docker/auth.json
+
       - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@v4
@@ -39,6 +44,14 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            BUILDKIT_INLINE_CACHE=1
+            COMPOSER_AUTH=${{ secrets.COMPOSER_AUTH }}
+
+      # Clean up sensitive files
+      - name: Clean up auth.json
+        if: always()
+        run: rm -f ./docker/auth.json
 
       # would prefer to scan the image BEFORE it's uploaded, but I've not been able to find a hook in the build-push-action that would allow this to happen
       # TODO: rather than using the build-push-action break the steps up with just a docker build / scan / docker push method.
