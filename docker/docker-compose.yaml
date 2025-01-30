@@ -18,6 +18,13 @@ services:
     ports:
       - 8080:8080
     restart: always
+    volumes:
+      - type: tmpfs
+        target: /mnt/wordpress-fastcgi-cache
+        tmpfs:
+          size: 100m
+    env_file:
+      - local.env
     environment:
       WORDPRESS_DATABASE_HOST: mariadb
       WORDPRESS_DATABASE_PORT_NUMBER: 3306
@@ -46,9 +53,10 @@ services:
           $$_SERVER['SERVER_PORT'] = 443;
         }
         /* S3 Uploads */
-        define('S3_UPLOADS_REGION', getenv('OS_REGION'));
-        define('S3_UPLOADS_BUCKET', getenv('OS_BUCKET'));
-        define('S3_UPLOADS_KEY', getenv('OS_ACCESS_KEY_ID'));
-        define('S3_UPLOADS_SECRET', getenv('OS_ACCESS_SECRET'));
-    volumes:
-      - /mnt/wordpress-fastcgi-cache
+        define('S3_UPLOADS_REGION', getenv('OBJECT_STORE_REGION'));
+        define('S3_UPLOADS_BUCKET', getenv('OBJECT_STORE_MEDIA_BUCKET'));
+        define('S3_UPLOADS_KEY', getenv('OBJECT_STORE_ACCESS_KEY_ID'));
+        define('S3_UPLOADS_SECRET', getenv('OBJECT_STORE_ACCESS_SECRET'));
+        define('S3_UPLOADS_BUCKET_URL', getenv('OBJECT_STORE_URL') . '/' . getenv('OBJECT_STORE_MEDIA_BUCKET') );
+        /* The s3-uploads plugin  */
+        require_once '/opt/bitnami/wordpress/vendor/autoload.php';

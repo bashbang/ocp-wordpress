@@ -4,6 +4,8 @@ FROM bitnami/wordpress-nginx:6.6.1
 
 USER root
 
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
 SHELL [ "/bin/bash", "-c" ]
 
 # Install necessary packages
@@ -33,6 +35,9 @@ RUN EXPECTED_CHECKSUM="$(php -r 'copy("https://composer.github.io/installer.sig"
 # The /opt/bitnami/wordpress folder is the source folder that will then generate content in /bitnami/wordpress/wp-content (for R/W abilities)
 WORKDIR /opt/bitnami/wordpress/
 
+# custom config the nginx to provide metrics for prometheus sidecar
+COPY nginx-prometheus-exporter-location-block.conf /opt/bitnami/nginx/conf/bitnami/nginx-prometheus-exporter-location-block.conf
+
 # With cacheing and potentially other customizations in the future, just use our own nginx config based off the default
 COPY wordpress-server-block.conf /opt/bitnami/nginx/conf/server_blocks/wordpress-server-block.conf
 COPY nginx.conf /opt/bitnami/nginx/conf/nginx.conf
@@ -49,20 +54,18 @@ RUN sed -i 's/;clear_env/clear_env/g' /opt/bitnami/php/etc/php-fpm.d/www.conf
 RUN sed -i 's|pm.max_children = 5|pm.max_children = 100|g' /opt/bitnami/php/etc/php-fpm.d/www.conf
 
 # install the themes and plugins as per the composer.json definition
+COPY mu-loader.php wp-content/mu-plugins/mu-loader.php
 COPY composer.json /opt/bitnami/wordpress/composer.json
+# TODO: REMOVE THIS auth.json in favour of using a secret
+COPY auth.json /opt/bitnami/wordpress/auth.json
 ENV COMPOSER_ALLOW_SUPERUSER=1
-
 RUN composer update
 
-# # RUN mkdir -p /opt/bitnami/wordpress/wp-content/mu-plugins
-# COPY plugins/rapunzel/ /opt/bitnami/wordpress/wp-content/plugins/rapunzel/
-# COPY plugins/s3-uploads-init.php /opt/bitnami/wordpress/wp-content/mu-plugins/s3-uploads-init.php
-# COPY init-plugins.sh /docker-entrypoint-init.d/init-plugins.sh
-# RUN chmod 755 /docker-entrypoint-init.d/init-plugins.sh
+COPY mu-loader.php /opt/bitnami/wordpress/wp-content/mu-plugins/mu-loader.php
 
-# # after the plugins are installed this is used to config the W3 Cache plugin
-# RUN mkdir -p /opt/bitnami/wordpress/wp-content/w3tc-config
-# COPY w3_cache_config_file_master.php /opt/bitnami/wordpress/wp-content/w3tc-config/master.php
+# after the plugins are installed this is used to config the W3 Cache plugin
+RUN mkdir -p /opt/bitnami/wordpress/wp-content/w3tc-config
+COPY w3_cache_config_file_master.php /opt/bitnami/wordpress/wp-content/w3tc-config/master.php
 
 RUN chown -R daemon:root /opt/bitnami/wordpress/wp-content && \
     chmod -R 775 /opt/bitnami/wordpress/wp-content
@@ -74,16 +77,14 @@ RUN chown -R daemon:root /opt/bitnami/wordpress/wp-content && \
 RUN unlink /opt/bitnami/php/logs/php-fpm.log ; \
     echo "error_log = /proc/1/fd/2" >> /opt/bitnami/php/etc/php.ini
 
-# # The plugins depend on access to the vendor folder for accessing shared libraries. Some of these plugins are designed specifically
-# # for the environment in which the plugin was installed which has different paths in place than this default WP install. For that
-# # reason we are creating some symlinks to allow the plugins to find the vendor folder.
-# # We have two because it's unclear at runtime which path the plugin would be using...since the wp-content folder is a symlink itself
-# # and different plugins use different methods of discovering the vendor folder.
-# # oh, and this doesn't account for all the methods.  Just the ones we've needed for the time being.
-# # TODO: This is ugly. There must be a better way within the code of not being dependant on the folder structure in this way.
-# RUN ln -sf /opt/bitnami/wordpress/vendor /opt/bitnami/vendor
-# RUN ln -sf /opt/bitnami/wordpress/vendor /bitnami/vendor
-
-# # ENV WORDPRESS_ENABLE_HTTPS=yes
+# The plugins depend on access to the vendor folder for accessing shared libraries. Some of these plugins are designed specifically
+# for the environment in which the plugin was installed which has different paths in place than this default WP install. For that
+# reason we are creating some symlinks to allow the plugins to find the vendor folder.
+# We have two because it's unclear at runtime which path the plugin would be using...since the wp-content folder is a symlink itself
+# and different plugins use different methods of discovering the vendor folder.
+# oh, and this doesn't account for all the methods.  Just the ones we've needed for the time being.
+# TODO: This is ugly. There must be a better way within the code of not being dependant on the folder structure in this way.
+RUN ln -sf /opt/bitnami/wordpress/vendor /opt/bitnami/vendor
+RUN ln -sf /opt/bitnami/wordpress/vendor /bitnami/vendor
 
 USER 1001

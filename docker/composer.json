@@ -17,7 +17,8 @@
         }
     ],
     "require": {
-        "bcgov-theme/bcgov-wordpress-block-theme": "dev-development"
+        "bcgov-plugin/rapunzel": "dev-development",
+        "humanmade/s3-uploads": "3.0.7"
     },
     "autoload": {
         "psr-4": {
@@ -41,7 +42,7 @@
                 "type:wordpress-theme"
             ],
             "installer-types": [
-            "wordpress-assets"
+                "wordpress-assets"
             ]
         }
     }
