@@ -3,14 +3,14 @@ entries:
   ocp-galera-helm:
   - apiVersion: v2
     appVersion: 1.17.0
-    created: "2025-01-21T00:52:06.502640978Z"
+    created: "2025-01-30T16:39:00.338116045Z"
     dependencies:
     - condition: mariadb.enabled
       name: mariadb-galera
       repository: https://charts.bitnami.com/bitnami
       version: 14.0.10
     description: A customized version of mariadb-galera for OCP
-    digest: ba9798c9211c17093c4e2ae06db524ef14f49ff489aa68d141e4a97b71b6fda6
+    digest: 9e72daf06a8e622b4e6655bf7996326f1f3899bbb160a424759b8b7e8fef4c67
     name: ocp-galera-helm
     type: application
     urls:
@@ -19,12 +19,12 @@ entries:
   ocp-wp-helm:
   - apiVersion: v2
     appVersion: 0.17.0
-    created: "2025-01-21T00:52:06.503099808Z"
+    created: "2025-01-30T16:39:00.338477072Z"
     description: Deploy a WordPress instance
-    digest: 0a5d818d641ee171da5bed139203dace6055bd157c5c724b5bf681f4987c9f50
+    digest: b74a87804e3e614f524ccf6477fb9a8894d6e183adffefd6bafec46fe0db0300
     name: ocp-wp-helm
     type: application
     urls:
     - https://bashbang.github.io/ocp-wordpress/ocp-wp-helm-0.1.3.tgz
     version: 0.1.3
-generated: "2025-01-21T00:52:06.499258373Z"
+generated: "2025-01-30T16:39:00.33456474Z"
